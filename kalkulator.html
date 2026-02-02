@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Kalkulator Rekomendasi Dosis Pupuk Padi</title>
+<style>
+    body { font-family: Arial, sans-serif; background:#f4f6f8; padding:20px; }
+    .box {
+        max-width: 750px;
+        background: #fff;
+        padding: 20px;
+        margin: auto;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2, h3 { text-align:center; color:#2e7d32; }
+    label { font-weight:bold; }
+    select, button {
+        width:100%;
+        padding:8px;
+        margin-top:5px;
+        margin-bottom:15px;
+    }
+    button {
+        border:none;
+        border-radius:4px;
+        color:#fff;
+        cursor:pointer;
+    }
+    .btn-hitung { background:#2e7d32; }
+    .btn-reset { background:#388e3c; }
+    table {
+        width:100%;
+        border-collapse:collapse;
+        margin-top:15px;
+    }
+    th, td {
+        border:1px solid #c8e6c9;
+        padding:8px;
+        text-align:center;
+    }
+    th { background:#a5d6a7; }
+    .note {
+        font-size:13px;
+        background:#e8f5e9;
+        padding:10px;
+        border-radius:5px;
+        margin-top:15px;
+    }
+    .btn-back {
+        background:#2e7d32;
+        margin-top:20px;
+        width:100%;
+        padding:10px;
+        border:none;
+        border-radius:4px;
+        color:#fff;
+        text-align:center;
+        text-decoration:none;
+        display:inline-block;
+        font-size:16px;
+        cursor:pointer;
+    }
+    #hasil { display:none; }
+</style>
+</head>
+<body>
+
+<div class="box">
+
+<h2>Kalkulator Rekomendasi Dosis Pupuk Padi</h2>
+
+<label>Jenis Penyakit</label>
+<select id="penyakit">
+    <option value="blast">Blast</option>
+    <option value="brown_spot">Brown Spot</option>
+    <option value="blight">Hawar Daun Bakteri</option>
+</select>
+
+<label>Tingkat Keparahan</label>
+<select id="keparahan">
+    <option value="ringan">Ringan</option>
+    <option value="sedang">Sedang</option>
+    <option value="berat">Berat</option>
+</select>
+
+<button class="btn-hitung" onclick="hitung()">Hitung Rekomendasi</button>
+
+<!-- HASIL LANGSUNG DI BAWAH -->
+<div id="hasil">
+
+<h3>Hasil Rekomendasi Dosis</h3>
+
+<table>
+<tr>
+    <th>Pupuk</th>
+    <th>Dosis (gram / 100 tanaman)</th>
+</tr>
+<tr>
+    <td>Urea (N)</td>
+    <td id="urea"></td>
+</tr>
+<tr>
+    <td>SP-36 (P)</td>
+    <td id="sp36"></td>
+</tr>
+<tr>
+    <td>KCl (K)</td>
+    <td id="kcl"></td>
+</tr>
+</table>
+
+<h3>Alasan Penyesuaian Unsur Hara</h3>
+<table>
+<tr>
+    <th>Unsur</th>
+    <th>Penyesuaian</th>
+    <th>Justifikasi Ilmiah</th>
+</tr>
+<tr>
+    <td>N</td>
+    <td>Dibatasi</td>
+    <td>Mengurangi kerentanan jaringan tanaman terhadap infeksi patogen</td>
+</tr>
+<tr>
+    <td>P</td>
+    <td>Optimal</td>
+    <td>Mendukung metabolisme energi dan pemulihan tanaman</td>
+</tr>
+<tr>
+    <td>K</td>
+    <td>Ditingkatkan</td>
+    <td>Memperkuat dinding sel dan meningkatkan ketahanan fisiologis</td>
+</tr>
+</table>
+
+<div class="note">
+<b>Catatan:</b> Penyesuaian dosis pupuk dilakukan sebagai strategi manajemen hara
+untuk mendukung ketahanan tanaman, bukan sebagai pengendalian langsung penyakit.
+</div>
+
+<a href="dashboard.html">
+    <button class="btn-back">Kembali ke Dashboard</button>
+</a>
+
+</div>
+</div>
+
+<script>
+const dasar = { urea:125, sp36:60, kcl:60 };
+
+const penyakit = {
+    blast:{urea:0.6, sp36:1.0, kcl:1.2},
+    brown_spot:{urea:1.2, sp36:1.2, kcl:1.3},
+    blight:{urea:0.7, sp36:1.0, kcl:1.1}
+};
+
+const tingkat = { ringan:0.9, sedang:1.0, berat:1.1 };
+
+function hitung(){
+    let p = document.getElementById("penyakit").value;
+    let k = document.getElementById("keparahan").value;
+
+    document.getElementById("urea").innerText =
+        (dasar.urea * penyakit[p].urea * tingkat[k]).toFixed(1);
+    document.getElementById("sp36").innerText =
+        (dasar.sp36 * penyakit[p].sp36 * tingkat[k]).toFixed(1);
+    document.getElementById("kcl").innerText =
+        (dasar.kcl * penyakit[p].kcl * tingkat[k]).toFixed(1);
+
+    document.getElementById("hasil").style.display = "block";
+}
+
+function resetForm(){
+    document.getElementById("hasil").style.display = "none";
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

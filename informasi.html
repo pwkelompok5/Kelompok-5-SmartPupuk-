@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informasi Penyakit Padi</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: white;
+        }
+
+        header {
+            background-color: #2e8b57;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #f2f2f2;
+            border-radius: 8px;
+        }
+
+        select {
+            padding: 10px;
+            width: 300px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            display: flex;
+            gap: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .info-box img {
+            width: 300px;
+            border-radius: 8px;
+        }
+
+        h3 {
+            color: #2e8b57;
+            margin-top: 0;
+        }
+
+        ul {
+            margin-left: 20px;
+        }
+
+        a {
+            color: #2e8b57;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .info-box {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        .btn-dashboard {
+            background-color: #2e7d32;   /* hijau */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+        .btn-dashboard:hover {
+            background-color: #1b5e20;   /* hijau lebih gelap */
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Informasi Penyakit Tanaman Padi</h1>
+</header>
+
+<div class="container">
+
+    <label for="penyakit">Pilih Jenis Penyakit:</label><br>
+    <select id="penyakit" onchange="tampilkanInfo()">
+        <option value="">-- Pilih Penyakit --</option>
+        <option value="blast">Blast</option>
+        <option value="bercak">Bercak Coklat</option>
+        <option value="hawar">Hawar Daun Bakteri</option>
+    </select>
+
+    <!-- BLAST -->
+    <div id="blast" class="info-box hidden">
+        <img src="image\blast.jpg"
+             alt="Penyakit Blast pada tanaman padi">
+
+        <div>
+            <h3>Penyakit Blast</h3>
+
+            <strong>Gejala:</strong>
+            <ul>
+                <li>Muncul bercak coklat keabu-abuan pada daun</li>
+                <li>Daun mengering dan mati</li>
+                <li>Pertumbuhan tanaman terhambat</li>
+            </ul>
+
+            <strong>Solusi Penanganan:</strong>
+            <ul>
+                <li>Gunakan varietas tahan sesuai dengan sebaran ras yang ada di daerah setempat</li>
+                <li>Hidarkan penggunaan pupuk nitrogen di atas dosis anjuran</li>
+                <li>Aplikasikan fungisida sesuai anjuran</li>
+            </ul>
+
+            <strong>Referensi:</strong>
+            <ul>
+                <li>
+                    <a href="https://www.bing.com/ck/a?!&&p=5b55945ee4cbeaf4a96926746bf041f4fd0c41f6ddebd761ed1d41083cbe24adJmltdHM9MTc2OTk5MDQwMA&ptn=3&ver=2&hsh=4&fclid=1035e160-021c-6f71-2922-f20b03806e81&psq=gambar+penyakit+blast&u=a1aHR0cHM6Ly9iZHNwMi5wZXJ0YW5pYW4uZ28uaWQvc2lwZXJkaXRhbi9hcnRwZGYvUGVuZ2VkYWxpYW5fUGVueWFraXRfQmxhc19QYWRhX1RhbmFtYW5fUGFkaS5wZGY" target="_blank">
+                        Balai Besar Penelitian Tanaman Padi
+                    </a>
+                </li>
+                <li>
+                    <a href="https://doi.org/10.14692/jfi.17.2.41-48" target="_blank">
+                        Salimah, N. A., Kuswinanti, T., & Nasruddin, A. (2021). Eksplorasi dan penentuan ras penyebab penyakit blas padi di Kabupaten Maros. Jurnal Fitopatologi Indonesia, 17(2), 41-48.
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- BERCAK COKLAT -->
+    <div id="bercak" class="info-box hidden">
+        <img src="image\bercak_coklat.jpeg"
+             alt="Penyakit bercak coklat pada daun padi">
+
+        <div>
+            <h3>Penyakit Brown Spot (Bercak Coklat)</h3>
+
+            <strong>Gejala:</strong>
+            <ul>
+                <li>Bercak-bercak sempit berwarna coklat pada daun</li>
+            </ul>
+
+            <strong>Solusi Penanganan:</strong>
+            <ul>
+                <li>Pengendalian mekanis dan fisik, seperti pengeringan atau perlakuan benih dengan air panas (sekitar 50°C selama 10 menit) untuk membunuh spora jamur pada permukaan benih.</li>
+                <li>Pengendalian secara kultur teknis, yaitu penggunaan benih sehat dan bersertifikat, sanitasi lahan dengan membersihkan sisa tanaman terinfeksi, rotasi tanaman dengan jenis non-padi, dan penanaman varietas tahan penyakit</li>
+                <li>Pengaturan jarak tanam yang optimal agar sirkulasi udara baik dan kelembapan daun dapat dikurangi.</li>
+            </ul>
+
+            <strong>Referensi:</strong><br>
+            <a href="https://distan.bulelengkab.go.id/informasi/detail/artikel/66_mirip-dengan-penyakit-blas-kenali-penyakit-bercak-coklat-brown-spot-pada-padi-helminthosporium-oryzae"
+               target="_blank">
+                Distan (Dinas Pertanian) Buleleng
+            </a>
+        </div>
+    </div>
+
+    <!-- HAWAR DAUN -->
+    <div id="hawar" class="info-box hidden">
+        <img src="image\hawar_daun.jpg"
+             alt="Hawar daun bakteri pada tanaman padi">
+
+        <div>
+            <h3>Hawar Daun Bakteri (Bacterial leaf Blight)</h3>
+
+            <strong>Gejala:</strong>
+            <ul>
+                <li>Tepi daun berwarna keabu-abuan dan lama-lama daun menjadi kering.</li>
+                <li>Jika serangan terjadi pada awal pertumbuhan,tanaman menjadi layu dan mati.</li>
+                <li>Pada tanaman dewasa menimbulkan gejala hawa (blight).</li>
+                <li>Jika serangan terjadi saat berbunga, proses pengisian gabah menjadi tidak sempurna, yang menyebabkan gabah tidak terisi penuh atau bahkan kosong.</li>
+            </ul>
+
+            <strong>Solusi Penanganan:</strong>
+            <ul>
+                <li>Penanaman dengan menggunakan benih dan bibit yang sehat.</li>
+                <li>Menggunakan varietas tahan bakteri.</li>
+                <li>Menanam dengan system Legowo dan system pengairan secara berselang (intermitten irrigation).</li>
+                <li>Hindari pemupukan nitrogen berlebihan.</li>
+                <li>Melakukan sanitasi lingkungan sawah dengan menjaga kebersihan sawah dari gulma.</li>
+            </ul>
+
+            <strong>Referensi:</strong><br>
+            <a href="https://bdsp2.pertanian.go.id/siperditan/artpdf/Pengendalian_Penyakit_Kresek_dan_Hawar_Daun_Bakteri_Pada_Tanaman_Padi.pdf"
+               target="_blank">
+                Balai Besar Penelitian Tanaman Padi
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<a href="dashboard.html">
+    <button class="btn-dashboard">
+        Kembali ke Dashboard
+    </button>
+</a>
+
+
+<script>
+    function tampilkanInfo() {
+        const semua = document.querySelectorAll(".info-box");
+        semua.forEach(div => div.classList.add("hidden"));
+
+        const pilihan = document.getElementById("penyakit").value;
+        if (pilihan) {
+            document.getElementById(pilihan).classList.remove("hidden");
+        }
+    }
+</script>
+
+</body>
+</html>
