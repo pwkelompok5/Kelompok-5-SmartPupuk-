@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Selesaikan Pembayaran - Toko Pupuk</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --hijau-utama: #27ae60;
+            --hijau-bg: #f4f7f6;
+        }
+        body { background-color: var(--hijau-bg); font-family: 'Segoe UI', sans-serif; }
+        .checkout-card { border: none; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        
+        /* Gaya Metode Pembayaran */
+        .payment-option {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .payment-option input[type="radio"] { 
+            position: absolute;
+            right: 20px;
+            accent-color: var(--hijau-utama);
+        }
+        .payment-option.active { 
+            border-color: var(--hijau-utama); 
+            background-color: #eafaf1; 
+        }
+        
+        .btn-bayar {
+            background-color: var(--hijau-utama);
+            border: none;
+            padding: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            font-size: 1.1rem;
+        }
+        .summary-item { display: flex; justify-content: space-between; margin-bottom: 8px; color: #666; font-size: 0.95rem; }
+        .total-price { font-size: 1.6rem; font-weight: 700; color: var(--hijau-utama); }
+        .product-img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <h4 class="mb-4 fw-bold text-center text-dark">Konfirmasi Pembayaran</h4>
+            
+            <div class="card checkout-card p-4">
+                <h6 class="fw-bold mb-3 text-secondary">Produk Yang Dibeli</h6>
+                <div id="product-summary" class="d-flex align-items-center mb-4 p-3 border rounded-3 bg-white">
+                    </div>
+
+                <div class="mb-4 border-bottom pb-3">
+                    <div class="summary-item">
+                        <span>Harga Satuan</span>
+                        <span id="harga-satuan">Rp 0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Jumlah (Qty)</span>
+                        <span id="display-qty" class="fw-bold text-dark">0</span>
+                    </div>
+                    <div class="summary-item mt-2">
+                        <span>Subtotal Produk</span>
+                        <span id="subtotal" class="fw-bold text-dark">Rp 0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Biaya Layanan</span>
+                        <span>Rp 1.000</span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <span class="fw-bold">Total Tagihan</span>
+                    <span class="total-price" id="total-display">Rp 0</span>
+                </div>
+
+                <h6 class="fw-bold mb-3 text-secondary">Pilih Metode Pembayaran</h6>
+                
+                <div class="payment-options">
+                    <label class="payment-option active" onclick="selectPayment(this)">
+                        <i class="fas fa-wallet me-3 fs-4 text-info"></i>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold small">E-Wallet (Dana/OVO/GoPay)</div>
+                            <small class="text-muted" style="font-size: 0.7rem;">Konfirmasi otomatis cepat</small>
+                        </div>
+                        <input type="radio" name="method" value="E-Wallet" checked>
+                    </label>
+
+                    <label class="payment-option" onclick="selectPayment(this)">
+                        <i class="fas fa-university me-3 fs-4 text-primary"></i>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold small">Transfer Bank</div>
+                            <small class="text-muted" style="font-size: 0.7rem;">BCA, Mandiri, BRI</small>
+                        </div>
+                        <input type="radio" name="method" value="Transfer Bank">
+                    </label>
+
+                    <label class="payment-option" onclick="selectPayment(this)">
+                        <i class="fas fa-truck me-3 fs-4 text-warning"></i>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold small">Bayar di Tempat (COD)</div>
+                            <small class="text-muted" style="font-size: 0.7rem;">Bayar saat kurir sampai</small>
+                        </div>
+                        <input type="radio" name="method" value="COD">
+                    </label>
+                </div>
+
+                <button onclick="bayar()" class="btn btn-bayar btn-success w-100 mt-4 shadow-sm">
+                    Bayar Sekarang
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. Memuat data dari localStorage yang dikirim oleh detail.html
+    function initCheckout() {
+        const checkoutData = JSON.parse(localStorage.getItem("checkout"));
+
+        if (!checkoutData || !checkoutData.items) {
+            alert("Data pesanan tidak ditemukan.");
+            window.location.href = "index.html";
+            return;
+        }
+
+        const item = checkoutData.items[0];
+        const qty = item.qty || 1;
+        const hargaSatuan = item.harga;
+        const subtotal = hargaSatuan * qty;
+        const biayaLayanan = 1000;
+        const totalBayar = subtotal + biayaLayanan;
+
+        // Update UI Produk
+        document.getElementById("product-summary").innerHTML = `
+            <img src="${item.gambar}" class="product-img me-3" onerror="this.src='https://via.placeholder.com/60?text=Pupuk'">
+            <div>
+                <div class="fw-bold text-dark">${item.nama}</div>
+                <small class="text-success fw-bold">Ready Stock</small>
+            </div>
+        `;
+
+        // Update UI Rincian Harga
+        document.getElementById("harga-satuan").innerText = "Rp " + hargaSatuan.toLocaleString('id-ID');
+        document.getElementById("display-qty").innerText = qty + " Unit";
+        document.getElementById("subtotal").innerText = "Rp " + subtotal.toLocaleString('id-ID');
+        document.getElementById("total-display").innerText = "Rp " + totalBayar.toLocaleString('id-ID');
+
+        // Simpan total terbaru ke objek checkout
+        checkoutData.totalFinal = totalBayar;
+        localStorage.setItem("checkout", JSON.stringify(checkoutData));
+    }
+
+    // Fungsi mengganti gaya pilihan pembayaran
+    function selectPayment(element) {
+        document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('active'));
+        element.classList.add('active');
+        element.querySelector('input').checked = true;
+    }
+
+    // Fungsi saat tombol bayar ditekan
+    function bayar() {
+        const checkoutData = JSON.parse(localStorage.getItem("checkout"));
+        const metodePilihan = document.querySelector('input[name="method"]:checked').value;
+
+        // Simpan ke daftar pesanan (History)
+        let daftarPesanan = JSON.parse(localStorage.getItem("pesanan")) || [];
+        daftarPesanan.push({
+            produk: checkoutData.items[0].nama,
+            jumlah: checkoutData.items[0].qty,
+            total: checkoutData.totalFinal,
+            metode: metodePilihan,
+            waktu: new Date().toLocaleString('id-ID'),
+            status: "Sedang Diproses"
+        });
+
+        localStorage.setItem("pesanan", JSON.stringify(daftarPesanan));
+
+        // Efek loading
+        const btn = document.querySelector('.btn-bayar');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Menghubungkan ke ' + metodePilihan + '...';
+        btn.disabled = true;
+
+        // Simulasi proses pembayaran sukses
+        setTimeout(() => {
+            // Hapus data sementara setelah bayar
+            localStorage.removeItem("checkout");
+            window.location.href = "status.html"; // Pastikan buat file status.html
+        }, 2000);
+    }
+
+    function bayar() {
+    let dataCheckout = JSON.parse(localStorage.getItem("checkout"));
+    let riwayatPesanan = JSON.parse(localStorage.getItem("pesanan")) || [];
+
+    // Tambahkan pesanan baru ke riwayat
+    riwayatPesanan.push({
+        items: dataCheckout.items, // Ini membawa data gambar tadi
+        total: dataCheckout.total,
+        status: "Sedang Diproses",
+        waktu: new Date().toLocaleString('id-ID')
+    });
+
+    localStorage.setItem("pesanan", JSON.stringify(riwayatPesanan));
+    window.location.href = "status.html";
+    }
+
+    window.onload = initCheckout;
+</script>
+
+</body>
+</html>

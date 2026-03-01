@@ -1,112 +1,173 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Dashboard</title>
+    <meta charset="UTF-8">
+    <title>SmartPupuk Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial, sans-serif;
-}
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-body{
-    display:flex;
-    background:#eef5f9;
-}
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-/* ===== SIDEBAR ===== */
-.sidebar{
-    width:220px;
-    background:#2e7d32;
-    min-height:100vh;
-    color:white;
-}
-
-.sidebar h2{
-    text-align:center;
-    padding:20px;
-    font-size:18px;
-    border-bottom:1px solid rgba(255,255,255,0.3);
-}
-
-.sidebar a{
-    display:block;
-    padding:15px 20px;
-    color:white;
-    text-decoration:none;
-    font-size:14px;
-}
-
-.sidebar a:hover{
-    background:#1b5e20;
-}
-
-/* ===== CONTENT ===== */
-.content{
-    flex:1;
-    padding:30px;
-}
-
-.content h1{
-    margin-bottom:20px;
-    color:#2e7d32;
-}
-
-/* ===== CARD ===== */
-.card{
-    background:white;
-    padding:20px;
-    margin-bottom:20px;
-    border-radius:8px;
-    box-shadow:0 0 8px rgba(0,0,0,0.1);
-}
-
-.card h3{
-    color:#2e7d32;
-    margin-bottom:10px;
-}
-
-.card p{
-    font-size:14px;
-    line-height:1.6;
-}
-</style>
+    <style>
+        body {
+            background: #f4f7fb;
+        }
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+            background: #2e7d32;
+        }
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: block;
+            font-size: 14px;
+        }
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #1b5e20;
+        }
+        .stat-card {
+            border: none;
+            border-radius: 12px;
+        }
+    </style>
 </head>
 
-<body>
+<body class="d-flex">
 
-<!-- ===== SIDEBAR ===== -->
-<div class="sidebar">
-    <h2>SmartPupuk</h2>
+<!-- SIDEBAR -->
+<div class="sidebar text-white">
+    <h5 class="text-center py-3 border-bottom">
+        🌾 SmartPupuk
+    </h5>
+
+    <a href="#" class="active">Dashboard</a>
     <a href="informasi.html">Informasi Penyakit</a>
-    <a href="kalkulator.html">Kalkulator Dosis Pupuk dan Vitamin</a>
-    <a href="index.html">Logout</a>
+    <a href="kalkulator.html">Kalkulator Dosis Pupuk & Vitamin</a>
+    <a href="penjualan.html">Penjualan & Review Pupuk</a>
+    <a href="login.html">Logout</a>
 </div>
 
-<!-- ===== MAIN CONTENT ===== -->
-<div class="content">
-    <h1>Dashboard</h1>
+<!-- MAIN CONTENT -->
+<div class="flex-fill p-4">
 
-    <div class="card">
-        <h3>Informasi Penyakit Tanaman Padi</h3>
-        <p>
-            Menyediakan informasi jenis penyakit tanaman padi, yaitu gambar,
-            gejala, dan solusi penanganan.
-        </p>
+    <h3 class="text-success mb-4">Dashboard</h3>
+
+    <!-- SUMMARY CARDS -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Jenis Pupuk</h6>
+                    <h3 class="text-success">3</h3>
+                    <small class="text-muted">Digunakan petani</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Total Review</h6>
+                    <h3 class="text-primary">145</h3>
+                    <small class="text-muted">Umpan balik pengguna</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Pengguna Aktif</h6>
+                    <h3 class="text-warning">290+</h3>
+                    <small class="text-muted">Petani terdaftar</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card stat-card shadow-sm">
+                <div class="card-body">
+                    <h6 class="text-muted">Kepuasan</h6>
+                    <h3 class="text-success">92%</h3>
+                    <small class="text-muted">Hasil review</small>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="card">
-        <h3>Kalkulator Rekomendasi Dosis Pupuk dan Vitamin</h3>
-        <p>
-            Menghitung dosis pupuk Urea, SP-36, dan KCl dan memberikan 
-            rekomendasi vitamin sesuai jenis penyakit.
-        </p>
+    <!-- FITUR -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="text-success">Informasi Penyakit Tanaman Padi</h5>
+            <p>
+                Menyediakan informasi jenis penyakit tanaman padi berupa gambar,
+                gejala, dan solusi penanganan.
+            </p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="text-success">Kalkulator Rekomendasi Dosis Pupuk dan Vitamin</h5>
+            <p>
+                Menghitung dosis pupuk Urea, SP-36, dan KCl serta memberikan
+                rekomendasi vitamin sesuai jenis penyakit.
+            </p>
+        </div>
+    </div>
+
+    <!-- GRAFIK & REVIEW -->
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="text-success mb-3">Pupuk Paling Banyak Digunakan</h5>
+                    <canvas id="grafikPupuk"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="text-success mb-3">Review & Masalah Pengguna</h5>
+                    <p><strong>Petani A:</strong> Dosis Urea sangat membantu.</p>
+                    <p><strong>Petani B:</strong> Vitamin membuat tanaman lebih hijau.</p>
+                    <p><strong>Petani C:</strong> Mohon panduan untuk serangan berat.</p>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
+
+<!-- SCRIPT GRAFIK -->
+<script>
+const ctx = document.getElementById('grafikPupuk');
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Urea','SP-36', 'KCl'],
+        datasets: [{
+            label: 'Tingkat Penggunaan (%)',
+            data: [85, 78, 60],
+            backgroundColor: '#4caf50'
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: { beginAtZero: true, max: 100 }
+        }
+    }
+});
+</script>
 
 </body>
 </html>

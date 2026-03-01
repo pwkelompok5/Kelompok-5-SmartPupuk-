@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Katalog Pupuk - Tema Hijau Profesional</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --hijau-utama: #27ae60; 
+            --hijau-tua: #219150;
+            --hijau-muda: #eafaf1; 
+            --hijau-border: #abebc6;
+            --bintang: #f1c40f; 
+        }
+
+        body { 
+            background: #f4f6f7; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        .card-custom { 
+            border: none; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+            background: white; padding: 25px; 
+        }
+        .text-hijau { 
+            color: var(--hijau-utama) !important; 
+        }
+        .btn-hijau { 
+            background-color: var(--hijau-utama); 
+            color: white; border: none; 
+            transition: background 0.2s; 
+        }
+        .btn-hijau:hover { 
+            background-color: var(--hijau-tua); 
+            color: white; 
+        }
+        .btn-outline-hijau { 
+            border: 1px solid var(--hijau-utama); 
+            color: var(--hijau-utama); background: transparent; 
+        }
+        .btn-outline-hijau:hover { 
+            background-color: var(--hijau-muda); 
+            color: var(--hijau-tua); 
+        }
+
+        .rating-overview {
+            background-color: var(--hijau-muda);
+            border: 1px solid var(--hijau-border);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .rating-score-box { 
+            text-align: center; 
+            margin-right: 30px; 
+            border-right: 1px solid var(--hijau-border); 
+            padding-right: 30px; 
+        }
+        .rating-score { 
+            color: #333; 
+            font-size: 2.5rem; 
+            font-weight: 700; 
+            line-height: 1; 
+        }
+        .rating-stars-lg { 
+            color: var(--bintang); 
+            font-size: 1.2rem; 
+        }
+        
+        .filter-btn {
+            background: #fff;
+            border: 1px solid #d5dbdb;
+            padding: 6px 16px;
+            cursor: pointer;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 2px;
+        }
+        .filter-btn.active { 
+            background-color: var(--hijau-utama); 
+            border-color: var(--hijau-utama); 
+            color: white; 
+        }
+
+        .review-item { 
+            border-bottom: 1px solid #eaeded; 
+            padding: 1.5rem 0; 
+            display: flex; 
+        }
+        .user-avatar { 
+            width: 42px; 
+            height: 42px; 
+            border-radius: 50%; 
+            background: var(--hijau-utama); 
+            color: white; 
+            margin-right: 15px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            flex-shrink: 0;
+        }
+        .review-stars { 
+            color: var(--bintang); 
+            font-size: 0.75rem; 
+        }
+        .review-comment { 
+            font-size: 0.9rem; 
+            color: #2c3e50; 
+            background: #f9f9f9; 
+            padding: 10px; 
+            border-radius: 8px; 
+            margin-top: 8px; 
+            display: inline-block; 
+        }
+        
+        .add-review-section { 
+            background: #fff; 
+            border: 1px solid #eaeded; 
+            border-radius: 8px; 
+            padding: 20px; 
+            margin-top: 30px; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5 pb-5">
+    <div class="mb-3 text-center">
+        <small class="text-muted">Pilih Produk (Testing): </small>
+        <a href="?produk=urea" class="btn btn-sm btn-light">Urea</a>
+        <a href="?produk=sp36" class="btn btn-sm btn-light">SP-36</a>
+        <a href="?produk=kcl" class="btn btn-sm btn-light">KCL</a>
+    </div>
+
+    <div class="card card-custom">
+        <div class="row g-4 mb-5 pb-4 border-bottom">
+            <div class="col-md-5 text-center">
+                <img id="gambar" class="img-fluid rounded-3" alt="Gambar Produk" style="max-height: 350px;">
+            </div>
+            <div class="col-md-7">
+                <h2 id="nama" class="fw-bold mb-1"></h2>
+                <div class="text-warning mb-3" style="font-size: 0.9rem;">
+                    <i class="fas fa-star"></i> <span id="rating-text">4.8</span> <span class="text-muted">(Ulasan Pembeli)</span>
+                </div>
+                <h3 class="text-hijau fw-bold mb-3" id="harga"></h3>
+                <p id="deskripsi" class="text-muted mb-4"></p>
+                
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <label class="form-label mb-0 fw-semibold">Jumlah:</label>
+                    <input type="number" id="qty" class="form-control text-center" value="1" min="1" style="width: 70px;">
+                </div>
+                
+                <div class="d-flex gap-2">
+                    <button onclick="tambahKeranjang()" class="btn btn-outline-hijau px-4 py-2"><i class="fas fa-cart-plus me-1"></i> Keranjang</button>
+                    <button onclick="beliSekarang()" class="btn btn-hijau px-4 py-2 fw-semibold">Beli Sekarang</button>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="fw-bold mb-4">PENILAIAN PRODUK</h5>
+
+        <div class="rating-overview">
+            <div class="rating-score-box">
+                <div class="rating-score" id="score-besar">4.8</div>
+                <div class="rating-stars-lg">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+            <div class="d-none d-md-block">
+                <button class="filter-btn active">Semua</button>
+                <button class="filter-btn">5 Bintang</button>
+                <button class="filter-btn">4 Bintang</button>
+                <button class="filter-btn">Dengan Foto</button>
+            </div>
+        </div>
+
+        <div id="listUlasan"></div>
+
+        <div class="add-review-section">
+            <h6 class="fw-bold mb-3"><i class="fas fa-edit text-hijau me-2"></i>Tambah Ulasan</h6>
+            <div class="row g-3">
+                <div class="col-md-6"><input type="text" id="namaUser" class="form-control" placeholder="Nama Anda"></div>
+                <div class="col-md-3">
+                    <select id="ratingUser" class="form-select">
+                        <option value="5">5 Bintang</option>
+                        <option value="4">4 Bintang</option>
+                        <option value="3">3 Bintang</option>
+                    </select>
+                </div>
+                <div class="col-12"><textarea id="komentarUser" class="form-control" rows="2" placeholder="Tulis ulasan produk di sini..."></textarea></div>
+                <div class="col-12 text-end"><button onclick="tambahUlasan()" class="btn btn-hijau px-4">Kirim Ulasan</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const dataProduk = {
+    urea: {
+        nama: "Pupuk Urea Non-Subsidi Nitrea Nitrogen 46% (50kg)",
+        harga: 90000,
+        gambar: "assets/image/urea.png",
+        deskripsi: "Pupuk Urea memiliki kandungan Nitrogen yang tinggi membantu daun lebih hijau dan jumlah anakan meningkat, sehingga tanaman siap menghasilkan panen optimal. Pupuk ini cocok untuk fase awal hingga pertumbuhan aktif.",
+        ulasan: [
+            {nama:"Andi", rating:5, komentar:"Sangat membantu pertumbuhan padi saya, mantap!", tanggal: "2 hari yang lalu"},
+            {nama:"Siti K.", rating:4, komentar:"Barang asli, respon penjual cepat.", tanggal: "1 minggu yang lalu"}
+        ]
+    },
+    sp36: {
+        nama: "Pupuk SP-36 Non-Subsidi Super Phosphate (50kg)",
+        harga: 570000,
+        gambar: "assets/image/sp36.png",
+        deskripsi: "SP-36 membantu pembentukan akar yang kuat sejak awal tanam. Tanaman menjadi lebih stabil dan mampu menyerap nutrisi dengan lebih baik. Pupuk ini cocok untuk lahan dengan kandungan fosfor rendah.",
+        ulasan: [
+            {nama:"Budi Santoso", rating:5, komentar:"Akar tanaman jadi lebih kuat, pohon tidak mudah rebah. Rekomendasi!", tanggal: "5 hari yang lalu"},
+            {nama:"Mulyono", rating:5, komentar:"Terbaik untuk awal masa tanam.", tanggal: "2 minggu yang lalu"}
+        ]
+    },
+    kcl: {
+        nama: "Pupuk KCL (MOP) Non-Subsidi Kalium Tinggi (50kg)",
+        harga: 450000,
+        gambar: "assets/image/kcl.png",
+        deskripsi: "Kalium dalam KCl membantu memperkuat tanaman dan mendukung pengisian gabah. Hasil panen menjadi lebih berkualitas dan tanaman tidak mudah rebah. Pupuk ini digunakan menjelang fase bunting.",
+        ulasan: [
+            {nama:"Haji Junaedi", rating:5, komentar:"Hasil panen gabah jadi lebih bernas dan berat. KCL emang jos!", tanggal: "1 hari yang lalu"},
+            {nama:"Rina", rating:4, komentar:"Packing rapi, butiran pupuk kering tidak menggumpal.", tanggal: "4 hari yang lalu"}
+        ]
+    }
+}
+
+// Global variable untuk menyimpan produk aktif
+let p = null;
+let produkKey = 'urea';
+
+function initProduk() {
+    const urlParams = new URLSearchParams(window.location.search);
+    produkKey = urlParams.get("produk") || 'urea';
+    p = dataProduk[produkKey];
+
+    if (p) {
+        document.getElementById("nama").innerText = p.nama;
+        document.getElementById("harga").innerText = "Rp " + p.harga.toLocaleString('id-ID');
+        document.getElementById("deskripsi").innerText = p.deskripsi;
+        document.getElementById("gambar").src = p.gambar;
+        renderUlasan();
+    }
+}
+
+function renderUlasan() {
+    const listContainer = document.getElementById("listUlasan");
+    listContainer.innerHTML = "";
+    const ulasanLokal = JSON.parse(localStorage.getItem("ulasan_" + produkKey)) || [];
+    const semuaUlasan = [...p.ulasan, ...ulasanLokal];
+
+    semuaUlasan.forEach(u => {
+        const inisial = u.nama.charAt(0).toUpperCase();
+        const starHtml = '<i class="fas fa-star"></i>'.repeat(u.rating) + '<i class="far fa-star"></i>'.repeat(5-u.rating);
+        
+        listContainer.innerHTML += `
+            <div class="review-item">
+                <div class="user-avatar">${inisial}</div>
+                <div class="review-content">
+                    <div class="d-flex justify-content-between">
+                        <span class="review-user-name fw-bold" style="font-size:0.85rem;">${u.nama}</span>
+                        <small class="text-muted" style="font-size:0.7rem;">${u.tanggal || 'Baru saja'}</small>
+                    </div>
+                    <div class="review-stars">${starHtml}</div>
+                    <div class="review-comment">${u.komentar}</div>
+                </div>
+            </div>`;
+    });
+}
+
+function tambahUlasan() {
+    const nama = document.getElementById("namaUser").value;
+    const komentar = document.getElementById("komentarUser").value;
+    const rating = parseInt(document.getElementById("ratingUser").value);
+
+    if(!nama || !komentar) return alert("Lengkapi ulasan Anda!");
+
+    const ulasanBaru = { nama, rating, komentar, tanggal: "Baru saja" };
+    const storage = JSON.parse(localStorage.getItem("ulasan_" + produkKey)) || [];
+    storage.push(ulasanBaru);
+    localStorage.setItem("ulasan_" + produkKey, JSON.stringify(storage));
+
+    document.getElementById("namaUser").value = "";
+    document.getElementById("komentarUser").value = "";
+    renderUlasan();
+}
+
+function tambahKeranjang() {
+    alert("Produk " + p.nama + " berhasil masuk keranjang!");
+}
+
+function beliSekarang() {
+    alert("Proses pembelian untuk " + p.nama);
+}
+
+function beliSekarang() {
+    const qty = parseInt(document.getElementById("qty").value);
+    
+    // Data ini harus sama strukturnya dengan yang dibaca di script Pembayaran
+    const dataBeli = {
+        items: [{
+            nama: p.nama,
+            harga: p.harga,
+            qty: qty,
+            gambar: p.gambar
+        }],
+        total: p.harga * qty // Subtotal murni
+    };
+
+    localStorage.setItem("checkout", JSON.stringify(dataBeli));
+    window.location.href = "pembayaran.html"; // Nama file pembayaran Anda
+}
+
+function prosesBeli() {
+    const qty = parseInt(document.getElementById("qty").value);
+    
+    // pData.img harus berisi kode Base64 dari admin atau path file lokal
+    const checkout = {
+        items: [{ 
+            nama: pData.nama, 
+            harga: pData.harga, 
+            qty: qty, 
+            gambar: pData.img // Pastikan baris ini ada
+        }],
+        total: pData.harga * qty
+    };
+    localStorage.setItem("checkout", JSON.stringify(checkout));
+    window.location.href = "pembayaran.html";
+}
+
+// Panggil fungsi init saat halaman pertama kali dimuat
+window.onload = initProduk;
+</script>
+</body>
+</html>

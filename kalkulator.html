@@ -127,13 +127,16 @@ table tr:hover {
 <div class="error" id="error"></div>
 
 <label>Luas Lahan (ha)</label>
-<input type="number" step="0.5" min="0.5" id="lahan">
+<input type="number" 
+        step="0.5" 
+        min="0.5" 
+        id="lahan">
 
 <label>Fase Pertumbuhan Padi (BBCH)</label>
 <select id="fase">
-    <option value="vegetatif">Fase Vegetatif</option>
-    <option value="generatif">Fase Generatif</option>
-    <option value="pengisian">Fase Pengisian Gabah</option>
+    <option value="vegetatif">Fase Vegetatif (10-29)</option>
+    <option value="generatif">Fase Pembungaan (50-59) </option>
+    <option value="pengisian">Fase Pengisian Biji (70-79)</option>
 </select>
 
 <label>Jenis Penyakit</label>
@@ -146,9 +149,9 @@ table tr:hover {
 
 <label>Tingkat Keparahan Penyakit</label>
 <select id="keparahan">
-    <option value="ringan">Ringan</option>
-    <option value="sedang">Sedang</option>
-    <option value="berat">Berat</option>
+    <option value="ringan">Ringan ( bila AP &lt; tingkat serangan &le; 11%)</option>
+    <option value="sedang">Sedang (bila 11% &lt; tingkat serangan &le; 25%)</option>
+    <option value="berat">Berat (bila 25% &lt; tingkat serangan &le; 85%)</option>
 </select>
 
 <button onclick="hitung()">Hitung Rekomendasi</button>
@@ -233,6 +236,12 @@ bukan pengganti fungisida atau bakterisida.
             jateng.brmp.pertanian.go.id
         </a>
     </li>
+
+    <li>
+        Direktorat Perlindungan Tanaman Pangan. (2018). <i>Petunjuk Teknis Pengamatan dan Pelaporan Organisme Pengganggu Tumbuhan dan Dampak Perubahan Iklim (OPT-DPI)</i>.  
+        <a href="https://repository.pertanian.go.id/handle/123456789/21001" target="_blank">
+            repository.pertanian.go.id
+        </a> 
 </ul>
 </div>
 

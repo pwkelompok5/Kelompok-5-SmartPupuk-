@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Pesanan Saya</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --hijau: #27ae60; 
+            --abu-bg: #f5f5f5; 
+        }
+        body { 
+            background-color: var(--abu-bg); 
+            font-family: -apple-system, sans-serif; 
+            padding-bottom: 80px; 
+        }
+        
+        /* Tab Navigasi */
+        .order-tabs { 
+            background: #fff; 
+            display: flex; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 1px solid #e8e8e8; 
+        }
+        .tab-item { 
+            flex: 1; 
+            text-align: center; 
+            padding: 14px 5px; 
+            font-size: 0.85rem; 
+            color: #555; 
+            cursor: pointer; 
+            border-bottom: 3px solid transparent; 
+        }
+        .tab-item.active { 
+            color: var(--hijau); 
+            border-bottom: 3px solid var(--hijau); 
+            font-weight: bold; 
+        }
+
+        /* Kartu Pesanan */
+        .order-card { 
+            background: #fff; 
+            margin-top: 10px; 
+            padding: 15px; 
+            border-bottom: 1px solid #eee; 
+        }
+        .order-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid #f8f8f8; 
+            padding-bottom: 10px; margin-bottom: 12px; 
+        }
+        .shop-info { 
+            font-weight: 600; 
+            font-size: 0.9rem; 
+            display: flex; 
+            align-items: center; 
+        }
+        .status-txt { 
+            color: var(--hijau); 
+            font-size: 0.8rem; 
+            font-weight: 600; 
+            text-transform: capitalize; 
+        }
+
+        /* Detail Produk */
+        .product-box { 
+            display: flex; 
+            align-items: flex-start; 
+            margin-bottom: 10px; 
+        }
+        .product-img { 
+            width: 80px; 
+            height: 80px; 
+            object-fit: cover; 
+            border-radius: 4px; 
+            border: 1px solid #f0f0f0; 
+            background: #fafafa; 
+        }
+        .product-details { 
+            flex: 1; 
+            padding-left: 12px; 
+        }
+        .product-title { 
+            font-size: 0.9rem; 
+            color: #333; 
+            margin-bottom: 2px; 
+            font-weight: 500; 
+        }
+        .product-qty { 
+            color: #888; 
+            font-size: 0.8rem; 
+        }
+        .product-price { 
+            text-align: right; 
+            font-size: 0.9rem; 
+            font-weight: 500; 
+            color: #333; 
+        }
+        
+        /* Bagian Total & Tombol */
+        .total-section { 
+            text-align: right; 
+            border-top: 1px solid #f8f8f8; 
+            padding-top: 12px; margin-top: 10px; 
+        }
+        .total-amount { 
+            color: var(--hijau); 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+        }
+        .btn-shp { 
+            font-size: 0.8rem; 
+            padding: 7px 18px; 
+            border-radius: 3px; 
+            border: 1px solid #ddd; 
+            background: #fff; 
+            cursor: pointer; 
+        }
+        .btn-fill { 
+            background: var(--hijau); 
+            color: white; 
+            border-color: var(--hijau); 
+        }
+
+        /* Tombol Reset di Bawah */
+        .reset-container { 
+            text-align: center; 
+            margin-top: 30px; 
+            padding: 20px; 
+        }
+        .btn-reset { 
+            background: #e74c3c; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 5px; 
+            font-size: 0.8rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            opacity: 0.7; 
+        }
+        .btn-reset:hover { 
+            opacity: 1; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="order-tabs">
+    <div class="tab-item active" onclick="render('Semua', this)">Semua</div>
+    <div class="tab-item" onclick="render('Sedang Diproses', this)">Dikemas</div>
+    <div class="tab-item" onclick="render('Dikirim', this)">Dikirim</div>
+    <div class="tab-item" onclick="render('Selesai', this)">Selesai</div>
+</div>
+
+<div id="list-pesanan"></div>
+
+<div class="reset-container">
+    <button class="btn-reset" onclick="hapusSemua()">
+        <i class="fas fa-trash-alt me-2"></i> Bersihkan Semua Riwayat Pesanan
+    </button>
+</div>
+
+<script>
+    function render(filter, el) {
+        if(el) {
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        const container = document.getElementById("list-pesanan");
+        const pesanan = JSON.parse(localStorage.getItem("pesanan")) || [];
+        
+        if (pesanan.length === 0) {
+            container.innerHTML = `<div class="text-center mt-5 text-muted">Belum ada pesanan.</div>`;
+            return;
+        }
+
+        container.innerHTML = "";
+
+        let filtered = filter === 'Semua' ? pesanan : pesanan.filter(p => p.status === filter);
+
+        [...filtered].reverse().forEach((p, idx) => {
+            const realIdx = pesanan.length - 1 - idx;
+            const item = p.items[0];
+            let imgSrc = item.gambar || 'https://via.placeholder.com/80?text=Pupuk';
+
+            container.innerHTML += `
+                <div class="order-card shadow-sm">
+                    <div class="order-header">
+                        <div class="shop-info">
+                            <i class="fas fa-store text-success me-2"></i> Toko Pupuk Berkah
+                        </div>
+                        <div class="status-txt">${p.status}</div>
+                    </div>
+                    
+                    <div class="product-box">
+                        <img src="${imgSrc}" class="product-img" onerror="this.src='https://via.placeholder.com/80?text=Error'">
+                        <div class="product-details">
+                            <div class="product-title">${item.nama}</div>
+                            <div class="product-qty text-muted">Kuantitas: x${item.qty}</div>
+                        </div>
+                        <div class="product-price">Rp ${item.harga.toLocaleString('id-ID')}</div>
+                    </div>
+
+                    <div class="total-section">
+                        <span style="font-size: 0.85rem; color: #555;">Total Pesanan: </span>
+                        <span class="total-amount">Rp ${p.total.toLocaleString('id-ID')}</span>
+                    </div>
+
+                    <div class="action-buttons text-end mt-3">
+                        ${p.status === 'Sedang Diproses' ? `<button class="btn-shp" onclick="upd(${realIdx}, 'Dikirim')">Simulasi Kirim</button>` : ''}
+                        ${p.status === 'Dikirim' ? `<button class="btn-shp btn-fill" onclick="upd(${realIdx}, 'Selesai')">Pesanan Diterima</button>` : ''}
+                        ${p.status === 'Selesai' ? `<button class="btn-shp btn-fill">Beli Lagi</button>` : ''}
+                    </div>
+                </div>`;
+        });
+    }
+
+    function upd(i, s) {
+        let pesanan = JSON.parse(localStorage.getItem("pesanan"));
+        pesanan[i].status = s;
+        localStorage.setItem("pesanan", JSON.stringify(pesanan));
+        render('Semua');
+    }
+
+    // FUNGSI BARU: Menghapus semua riwayat pesanan
+    function hapusSemua() {
+        if (confirm("Apakah Anda yakin ingin menghapus semua riwayat pesanan? Tindakan ini tidak bisa dibatalkan.")) {
+            localStorage.removeItem("pesanan"); // Menghapus key 'pesanan' saja
+            render('Semua');
+            alert("Riwayat pesanan telah dibersihkan.");
+        }
+    }
+
+    render('Semua');
+</script>
+</body>
+</html>
